@@ -33,9 +33,7 @@ namespace PK.Kata.Tests
             var promotion = _promotions.FirstOrDefault(pm => pm.Code == actualProduct.Promotion);
             Assert.NotNull(promotion);
 
-            var sets = amount.SetOf(promotion.SetAmount);
-            var remainder = amount.RemainderOf(promotion.SetAmount);
-            var actualPrice = (sets * promotion.SetPrice) + (remainder * actualProduct.UnitPrice);
+            var actualPrice = PricingHelper.CalculateActualPrice(actualProduct, promotion, amount);
             var expectedPrice =
                 PricingHelper.CalculateSetPricePromotion(amount, actualProduct.UnitPrice, promotion.SetAmount, promotion.SetPrice);
             
