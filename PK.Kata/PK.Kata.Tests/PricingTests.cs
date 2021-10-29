@@ -40,7 +40,25 @@ namespace PK.Kata.Tests
             Assert.Equal(actualPrice, expectedPrice);
         }
 
+        [Fact]
+        public void Test_25_percentage_discount_promotion_for_sku_D()
+        {
+            var actualSku = "D";
+            var amount = 5;
 
+            var actualProduct = _products.FirstOrDefault(p => p.Sku == actualSku);
+            Assert.NotNull(actualProduct);
+
+            var promotion = _promotions.FirstOrDefault(pm => pm.Code == actualProduct.Promotion);
+            Assert.NotNull(promotion);
+
+            var actualPrice = PricingHelper.CalculateActualPrice(actualProduct, promotion, amount);
+            var expectedPrice = PricingHelper.CalculatePecentageOff(amount, actualProduct.UnitPrice,
+                promotion.SetAmount, promotion.PercentOff);
+
+            Assert.Equal(actualPrice, expectedPrice);
+
+        }
         
 
 

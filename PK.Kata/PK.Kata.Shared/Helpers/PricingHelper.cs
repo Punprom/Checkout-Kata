@@ -35,7 +35,7 @@ namespace PK.Kata.Shared.Helpers
         {
             decimal thePrice = 0;
 
-            if (promotion.Code == "3 for 40")
+            if (promotion.IsSet)
             {
                 var sets = tenderAmount.SetOf(promotion.SetAmount);
                 var remainder = tenderAmount.RemainderOf(promotion.SetAmount);
@@ -46,9 +46,11 @@ namespace PK.Kata.Shared.Helpers
             {
                 var sets = tenderAmount.SetOf(promotion.SetAmount);
                 var remainder = tenderAmount.RemainderOf(promotion.SetAmount);
-                var aPairPrice = (product.UnitPrice * promotion.SetAmount);
-                var discountPerPair = (aPairPrice * promotion.PercentOff) / 100;
-                var aPairCosts = aPairPrice - discountPerPair;
+                var totalPairCosts = (product.UnitPrice * promotion.SetAmount);
+
+                var discountPerPair = (decimal)(totalPairCosts * promotion.PercentOff) / 100;
+                var aPairCosts = totalPairCosts - discountPerPair;
+                
                 thePrice = (aPairCosts * sets) + (remainder * product.UnitPrice);
 
             }
@@ -64,13 +66,13 @@ namespace PK.Kata.Shared.Helpers
         /// <param name="set">set of items to be discounted</param>
         /// <param name="percentOff">amount percentage off</param>
         /// <returns>price to be paid</returns>
-        public decimal CalculatePecentageOff(int amount, int unitPrice, int set, int percentOff)
+        public static decimal CalculatePecentageOff(int amount, int unitPrice, int set, int percentOff)
         { 
-            var sets = amount.SetOf(amount);
+            var sets = amount.SetOf(set);
             var remainder =amount.RemainderOf(set);
            
             var aPairPrice = (unitPrice * set);
-            var discountPerPair = (aPairPrice * percentOff) / 100;
+            decimal discountPerPair = (decimal)((decimal)(aPairPrice * percentOff) / 100);
             var aPairCosts = aPairPrice - discountPerPair;
             var thePrice = (aPairCosts * sets) + (remainder * unitPrice);
 
